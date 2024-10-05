@@ -1118,3 +1118,5 @@ module Event: {
     [@mel.get] external elapsedTime: t => float = "elapsedTime";
   };
 };
+
+[@mel.module "react"] external use: Js.Promise.t('a) => 'a = "use";

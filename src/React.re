@@ -896,3 +896,5 @@ module Experimental = {
 
   [@mel.module "react"] external use: Js.Promise.t('a) => 'a = "use";
 };
+
+[@mel.module "react"] external use: Js.Promise.t('a) => 'a = "use";
