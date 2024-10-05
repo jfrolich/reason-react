@@ -470,17 +470,6 @@ external displayName: component('props) => option(string) = "displayName";
 /* This is used as return values */
 type callback('input, 'output) = 'input => 'output;
 
-/*
- * Yeah, we know this api isn't great. tl;dr: useReducer instead.
- * It's because useState can take functions or non-function values and treats
- * them differently. Lazy initializer + callback which returns state is the
- * only way to safely have any type of state and be able to update it correctly.
- */
-[@mel.module "react"]
-external useState:
-  ([@mel.uncurry] (unit => 'state)) => ('state, ('state => 'state) => unit) =
-  "useState";
-
 [@mel.module "react"]
 external useReducer:
   ([@mel.uncurry] (('state, 'action) => 'state), 'state) =>
@@ -715,6 +704,24 @@ external useCallback6: ('fn, ('a, 'b, 'c, 'd, 'e, 'f)) => 'fn = "useCallback";
 [@mel.module "react"]
 external useCallback7: ('fn, ('a, 'b, 'c, 'd, 'e, 'f, 'g)) => 'fn =
   "useCallback";
+
+/*
+ * Yeah, we know this api isn't great. tl;dr: useReducer instead.
+ * It's because useState can take functions or non-function values and treats
+ * them differently. Lazy initializer + callback which returns state is the
+ * only way to safely have any type of state and be able to update it correctly.
+ */
+[@mel.module "react"]
+external useState:
+  ([@mel.uncurry] (unit => 'state)) =>
+  ('state, (. ('state => 'state)) => unit) =
+  "useState";
+
+let useState = initialState => {
+  let (state, setState) = useState(initialState);
+  let setState = useCallback1(fn => setState(. fn), [|setState|]);
+  (state, setState);
+};
 
 [@mel.module "react"]
 external useContext: Context.t('any) => 'any = "useContext";
