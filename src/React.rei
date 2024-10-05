@@ -165,10 +165,7 @@ module Suspense: {
  * them differently. Lazy initializer + callback which returns state is the
  * only way to safely have any type of state and be able to update it correctly.
  */
-[@mel.module "react"]
-external useState:
-  ([@mel.uncurry] (unit => 'state)) => ('state, ('state => 'state) => unit) =
-  "useState";
+let useState: (unit => 'state) => ('state, ('state => 'state) => unit);
 
 [@mel.module "react"]
 external useReducer:
@@ -565,7 +562,8 @@ module Uncurried: {
 };
 
 [@mel.module "react"]
-external startTransition: ([@mel.uncurry] (unit => unit)) => unit = "startTransition";
+external startTransition: ([@mel.uncurry] (unit => unit)) => unit =
+  "startTransition";
 
 [@mel.module "react"]
 external useTransition: unit => (bool, callback(callback(unit, unit), unit)) =
